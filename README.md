@@ -35,8 +35,8 @@ sudo apt-get install python3-pip
 ```
 
 - Setup editor with Linux-Based Environemnt
-  - VScode
-[WSL Extension](https://code.visualstudio.com/docs/remote/wsl)
+[Visual Studio Code](https://code.visualstudio.com/docs/remote/wsl)
+[PyCharm](https://www.jetbrains.com/help/pycharm/using-wsl-as-a-remote-interpreter.html)
 
 - Upgrade pip, setuptools, and wheel:
 ```bash
