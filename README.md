@@ -9,6 +9,9 @@ Before setting up the project, ensure you have the following:
 - **Python Version**: Python 3.10 
 - **Package Manager**: `pip` (ensure it's up-to-date with `pip install --upgrade pip`)
 
+### Install Linux-based environment on Windows
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/28Ei63qtquQ/0.jpg)](https://www.youtube.com/watch?v=28Ei63qtquQ)
+
 ### Verify Python Version
 
 To verify that you have the correct version of Python installed, run:
@@ -30,6 +33,10 @@ sudo apt-get update
 ```bash
 sudo apt-get install python3-pip
 ```
+
+-Setup editor with Linux-Based Environemnt
+##VScode
+[WSL Extension](https://code.visualstudio.com/docs/remote/wsl)
 
 -Upgrade pip, setuptools, and wheel:
 ```bash
