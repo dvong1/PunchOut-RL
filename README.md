@@ -22,29 +22,29 @@ python3 --version
 
 ## Getting Started
 
-1. Install Stable-Retro
+### 1. Install Stable-Retro
 - Open **Terminal** in your Linux environment
 - Update packages
 ```bash
 sudo apt-get update
 ```
 
--Install Pip
+- Install Pip
 ```bash
 sudo apt-get install python3-pip
 ```
 
--Setup editor with Linux-Based Environemnt
-##VScode
+- Setup editor with Linux-Based Environemnt
+  - VScode
 [WSL Extension](https://code.visualstudio.com/docs/remote/wsl)
 
--Upgrade pip, setuptools, and wheel:
+- Upgrade pip, setuptools, and wheel:
 ```bash
 pip install --upgrade pip setuptools wheel
 ```
 
--Create a Virtual Environment:
-### Navigate to your project directory and create a virtual environment:
+- Create a Virtual Environment: <br>
+- Navigate to your project directory and create a virtual environment:
 ```bash
 python3 -m venv venv
 ```
@@ -58,7 +58,7 @@ source venv/bin/activate
 pip install stable-retro
 ```
 
-2. Set Up the ROM File
+### 2. Set Up the ROM File
 - Copy the rom (.nes) file 
 ```bash
 cp /PunchOut-RL/PunchOut.nes /PunchOut-RL/venv/lib/python3.10/site-packages/retro/data/stable/PunchOut-Nes/
