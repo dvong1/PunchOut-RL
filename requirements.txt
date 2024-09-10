@@ -1,0 +1,7 @@
+cloudpickle==3.0.0
+Farama-Notifications==0.0.4
+gymnasium==0.29.1
+numpy==2.1.1
+pyglet==1.5.29
+stable-retro==0.9.2
+typing_extensions==4.12.2
