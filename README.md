@@ -9,7 +9,7 @@ Before setting up the project, ensure you have the following:
 - **Python Version**: Python 3.10 
 - **Package Manager**: `pip` (ensure it's up-to-date with `pip install --upgrade pip`)
 
-### Install Linux-based environment on Windows
+### Install Linux-based environment on Windows (preferably Ubuntu 22.04 distro)
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/28Ei63qtquQ/0.jpg)](https://www.youtube.com/watch?v=28Ei63qtquQ)
 
 ### Verify Python Version
