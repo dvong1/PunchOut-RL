@@ -1,6 +1,7 @@
 import retro
 import numpy as np
 import pygame
+import virtualGamepad.loadGamepad as loadGamepad
 
 keys_to_action = { # Dictionary that maps keyboard buttons to multibinary list that is read by the emulator 
     # Punch buttons
@@ -30,7 +31,16 @@ def emulate():
     # Set up a scaled display for the rendered frames
     scale_factor = 4  # Change this to increase/decrease zoom (e.g., 2 for double size)
     original_width, original_height = 256, 240  # NES native resolution
-    screen_width, screen_height = original_width * scale_factor, original_height * scale_factor
+    screen_width, screen_height = original_width * scale_factor + 512 , original_height * scale_factor
+
+    # Set up the area for gamepad visualization (bottom right corner)
+    gamepad_width = 512
+    gamepad_height = screen_height // 2  # Bottom half of the extra space
+    gamepad_rect = pygame.Rect(1024, screen_height // 2, gamepad_width, gamepad_height)
+
+    # Set up the area for the NN visualization (top right corner, blank for now)
+    nn_visualization_rect = pygame.Rect(1024, 0, gamepad_width, screen_height // 2)
+
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption('Punch-Out!!')
 
@@ -42,6 +52,7 @@ def emulate():
     running = True
     while running:
         action = np.array(noop_action)  # Start with no buttons pressed
+        pressed_buttons = []  # Save buttons pressed to a list to update gamepad image
 
         # Close game after clicking quit corner button
         for event in pygame.event.get():
@@ -57,6 +68,24 @@ def emulate():
             if all(keys_pressed[key] for key in key_combination):
                 action = np.logical_or(action, action_array)  # Combine actions
 
+                # Check which buttons are pressed and add to pressed_buttons so this can be read by the gamepad overlay. Remember that the emulator can only read multibinary lists and not direct key presses like gamepad overlay
+                if key_combination == (ord('z'),):
+                    pressed_buttons.append('B')
+                elif key_combination == (ord('x'),):
+                    pressed_buttons.append('A')
+                elif key_combination == (pygame.K_UP,):
+                    pressed_buttons.append('UP')
+                elif key_combination == (pygame.K_DOWN,):
+                    pressed_buttons.append('DOWN')
+                elif key_combination == (pygame.K_LEFT,):
+                    pressed_buttons.append('LEFT')
+                elif key_combination == (pygame.K_RIGHT,):
+                    pressed_buttons.append('RIGHT')
+                elif key_combination == (pygame.K_RETURN,):
+                    pressed_buttons.append('START')
+                elif key_combination == (pygame.K_RSHIFT,):
+                    pressed_buttons.append('SELECT')
+
         action = action.astype(int)
 
         # Step the environment and get the rendered frame
@@ -64,10 +93,16 @@ def emulate():
         obs = pygame.surfarray.make_surface(np.transpose(obs, (1, 0, 2)))  # Convert to Pygame surface
 
         # Scale the image to the desired size
-        obs = pygame.transform.scale(obs, (screen_width, screen_height))
+        obs = pygame.transform.scale(obs, (screen_width - 512, screen_height)) # The removed 512 pixels will be used for neural network and gamepad overlay
 
         # Blit the frame to the screen
         screen.blit(obs, (0, 0))
+
+        # Blit a black rectangle for the future neural network visualization (top right)
+        pygame.draw.rect(screen, (0, 0, 0), nn_visualization_rect)
+
+        # Call the gamepad rendering function from the imported module (bottom right)
+        loadGamepad.draw_gamepad_overlay(pressed_buttons, screen, gamepad_rect)
 
         pygame.display.flip()
 
