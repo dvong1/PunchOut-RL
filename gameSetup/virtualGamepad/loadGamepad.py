@@ -24,6 +24,11 @@ button_positions = {
     'RIGHT': (0, 0)
 }
 
+def initialize_display():
+    global screen
+    screen = pygame.display.set_mode((gamepad_image.get_width() / 4, gamepad_image.get_height() / 4)) # Scale controller window down by factor of 4
+    pygame.display.set_caption('Gamepad Overlay')
+
 def draw_gamepad_overlay(pressed_buttons, screen, gamepad_rect):
     # Draw the base gamepad image in the specified rectangle and scale it accordingly to fit the bottom right corner
     gamepad_scaled = pygame.transform.scale(gamepad_image, (gamepad_rect.width, gamepad_rect.height))
@@ -33,6 +38,24 @@ def draw_gamepad_overlay(pressed_buttons, screen, gamepad_rect):
         if button in highlight_images:
             updated_gamepad = pygame.transform.scale(highlight_images[button], (gamepad_rect.width, gamepad_rect.height)) # Scale the specific presssed button images 
             screen.blit(updated_gamepad, gamepad_rect.topleft) #Update the screen to reflect the button pressed
+
+# Overload function for RL agent
+def draw_gamepad_overlayRL(pressed_buttons):
+    # Clear the screen
+    screen.fill((0, 0, 0))
+    
+    # Draw the base gamepad image
+    gamepad_scaled = pygame.transform.scale(gamepad_image, (gamepad_image.get_width() / 4, gamepad_image.get_height() / 4))
+    screen.blit(gamepad_scaled, (0, 0))
+    
+    # Highlight pressed buttons
+    for button in pressed_buttons:
+        if button in highlight_images:
+            updated_gamepad = pygame.transform.scale(highlight_images[button], (gamepad_image.get_width() / 4, gamepad_image.get_height() / 4))
+            screen.blit(updated_gamepad, button_positions[button])
+    
+    # Update the display
+    pygame.display.flip()
 
 # Example to emulate game with button press tracking
 def emulate_with_visualization():
