@@ -53,9 +53,10 @@ and activate the venv
 source venv/bin/activate
 ```
 
-- Install Stable-retro
+- Install Stable-retro and the required libraries
 ```bash
 pip install stable-retro
+pip install -r requirements.txt
 ```
 
 ### 2. Set Up the ROM File
