@@ -62,7 +62,7 @@ pip install -r requirements.txt
 ### 2. Set Up the ROM File
 - Copy the rom (.nes) file 
 ```bash
-cp /PunchOut-RL/PunchOut.nes /PunchOut-RL/venv/lib/python3.10/site-packages/retro/data/stable/PunchOut-Nes/
+cp PunchOut.nes venv/lib/python3.10/site-packages/retro/data/stable/PunchOut-Nes/
 cd /PunchOut-RL/venv/lib/python3.10/site-packages/retro/data/stable/PunchOut-Nes/
 mv PunchOut.nes rom.nes
 ```
