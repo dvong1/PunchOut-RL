@@ -12,14 +12,6 @@ Before setting up the project, ensure you have the following:
 ### Install Linux-based environment on Windows (preferably Ubuntu 22.04 distro)
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/28Ei63qtquQ/0.jpg)](https://www.youtube.com/watch?v=28Ei63qtquQ)
 
-### Verify Python Version
-
-To verify that you have the correct version of Python installed, run:
-
-```bash
-python3 --version
-```
-
 ## Getting Started
 
 ### 1. Install Stable-Retro
@@ -34,9 +26,19 @@ sudo apt-get update
 sudo apt-get install python3-pip
 ```
 
+- Verify that you have the correct version of Python installed, run:
+
+```bash
+python3 --version
+```
+
 - Setup editor with Linux-Based Environemnt <br>
 [Visual Studio Code](https://code.visualstudio.com/docs/remote/wsl) <br>
 [PyCharm](https://www.jetbrains.com/help/pycharm/using-wsl-as-a-remote-interpreter.html)
+
+### Clone the git repo and open the project folder while connected to the WSL server in your editor
+
+### Open a terminal in your python editor and run this command in that terminal (Not linux bash!)
 
 - Upgrade pip, setuptools, and wheel:
 ```bash
@@ -55,7 +57,6 @@ source venv/bin/activate
 
 - Install Stable-retro and the required libraries
 ```bash
-pip install stable-retro
 pip install -r requirements.txt
 ```
 
