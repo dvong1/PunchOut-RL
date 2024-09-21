@@ -36,9 +36,9 @@ python3 --version
 [Visual Studio Code](https://code.visualstudio.com/docs/remote/wsl) <br>
 [PyCharm](https://www.jetbrains.com/help/pycharm/using-wsl-as-a-remote-interpreter.html)
 
-### Clone the git repo and open the project folder while connected to the WSL server in your editor
+### 2. Clone the git repo and open the project folder while connected to the WSL server in your editor
 
-### Open a terminal in your python editor and run this command in that terminal (Not linux bash!)
+### 3. Open a terminal in your python editor and run this command in that terminal (Not linux bash!)
 
 - Upgrade pip, setuptools, and wheel:
 ```bash
@@ -60,7 +60,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Set Up the ROM File
+### 4. Set Up the ROM File
 - Copy the rom (.nes) file 
 ```bash
 cp PunchOut.nes venv/lib/python3.10/site-packages/retro/data/stable/PunchOut-Nes/
@@ -69,7 +69,7 @@ mv PunchOut.nes rom.nes
 cd ~/PunchOut-RL
 ```
 
-### 3. Download necessary visual files
+### 5. Download necessary visual interface package
 - Run these commands in linux bash for your wsl distro
 ```bash
 sudo apt-get install libglu1-mesa libgl1-mesa-glx
