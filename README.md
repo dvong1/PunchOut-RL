@@ -66,3 +66,11 @@ cp /PunchOut-RL/PunchOut.nes /PunchOut-RL/venv/lib/python3.10/site-packages/retr
 cd /PunchOut-RL/venv/lib/python3.10/site-packages/retro/data/stable/PunchOut-Nes/
 mv PunchOut.nes rom.nes
 ```
+
+### 3. Download necessary visual files
+- Run these commands in linux bash for your wsl distro
+```bash
+sudo apt-get install libglu1-mesa libgl1-mesa-glx
+sudo apt-get install libgl1-mesa-dev libglu1-mesa-dev
+sudo apt-get install python3-opengl
+```
