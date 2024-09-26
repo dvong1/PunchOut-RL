@@ -22,7 +22,7 @@ noop_action = [0] * 9
 
 def emulate():
     # Create PunchOut environment
-    env = retro.make(game="PunchOut-Nes", state="Match1.state")
+    env = retro.make(game="PunchOut-Nes", state="Match1.state", render_mode=None)
     env.reset()
 
     # Initialize Pygame

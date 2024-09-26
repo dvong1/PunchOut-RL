@@ -25,9 +25,10 @@ button_positions = {
 }
 
 def initialize_display():
-    global screen
     screen = pygame.display.set_mode((gamepad_image.get_width() / 4, gamepad_image.get_height() / 4)) # Scale controller window down by factor of 4
     pygame.display.set_caption('Gamepad Overlay')
+
+    return screen
 
 def draw_gamepad_overlay(pressed_buttons, screen, gamepad_rect):
     # Draw the base gamepad image in the specified rectangle and scale it accordingly to fit the bottom right corner
@@ -40,28 +41,21 @@ def draw_gamepad_overlay(pressed_buttons, screen, gamepad_rect):
             screen.blit(updated_gamepad, gamepad_rect.topleft) #Update the screen to reflect the button pressed
 
 # Overload function for RL agent
-def draw_gamepad_overlayRL(pressed_buttons):
-    # Clear the screen
-    screen.fill((0, 0, 0))
-    
+def draw_gamepad_overlayRL(pressed_buttons, screen, gamepad_rect):    
     # Draw the base gamepad image
-    gamepad_scaled = pygame.transform.scale(gamepad_image, (gamepad_image.get_width() / 4, gamepad_image.get_height() / 4))
-    screen.blit(gamepad_scaled, (0, 0))
+    gamepad_scaled = pygame.transform.scale(gamepad_image, (gamepad_rect.width, gamepad_rect.height))
+    screen.blit(gamepad_scaled, gamepad_rect.topleft)
     
     # Highlight pressed buttons
     for button in pressed_buttons:
         if button in highlight_images:
-            updated_gamepad = pygame.transform.scale(highlight_images[button], (gamepad_image.get_width() / 4, gamepad_image.get_height() / 4))
-            screen.blit(updated_gamepad, button_positions[button])
-    
-    # Update the display
-    pygame.display.flip()
+            updated_gamepad = pygame.transform.scale(highlight_images[button], (gamepad_rect.width, gamepad_rect.height))
+            screen.blit(updated_gamepad, gamepad_rect.topleft)
 
 # Example to emulate game with button press tracking
 def emulate_with_visualization():
-    screen = pygame.display.set_mode((gamepad_image.get_width(), gamepad_image.get_height()))
-
     pygame.init()
+    screen = pygame.display.set_mode((gamepad_image.get_width(), gamepad_image.get_height()))
     running = True
     screen = pygame.display.set_mode((1536, 960))  # Dummy window for standalone visualization
     gamepad_rect = pygame.Rect(1024, 960 // 2, 512, 480)  # Adjust as needed
