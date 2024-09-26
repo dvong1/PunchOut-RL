@@ -54,7 +54,8 @@ class CustomPunchOutEnv:
 
     def render(self):
         self.env.render()
-\
+
+
 # Main function to load the game
 def loadGame():
     # Create custom PunchOut environment
@@ -123,7 +124,6 @@ def loadGame():
             pressed_buttons.append('B')
 
         # Take a step with the chosen action
-        print(f"Stepping with action: {action}")
         obs, reward, terminated, truncated, info = custom_env.step(action)
 
         # Convert observation to Pygame surface and render to screen
@@ -137,8 +137,7 @@ def loadGame():
         custom_env.render()
 
         # Only update the gamepad overlay every 12 frames to avoid performance hit
-        if frame_count % 12 == 0:
-            loadGamepad.draw_gamepad_overlayRL(pressed_buttons, screen, gamepad_rect)
+        loadGamepad.draw_gamepad_overlayRL(pressed_buttons, screen, gamepad_rect)
             
         frame_count += 1
         pygame.display.flip()
@@ -149,6 +148,7 @@ def loadGame():
 def loadGame2():
     env = retro.make(game="PunchOut-Nes", state="Match1.state")
     env.reset()
+    print(env.metadata)
 
     done = False
 
