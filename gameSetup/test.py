@@ -2,6 +2,15 @@ import retro
 import virtualGamepad.loadGamepad as loadGamepad
 from gymnasium import spaces
 import pygame
+import pyglet
+import os
+import numpy as np
+
+pyglet.options['debug_gl'] = False
+if 'WSL_INTEROP' in os.environ:
+    flipDisplay = False
+else:
+    flipDisplay = True
 
 # Define custom action space for Punch-Out
 class CustomPunchOutEnv:
@@ -45,6 +54,12 @@ class CustomPunchOutEnv:
 
     def render(self):
         self.env.render()
+        # img = self.env.render(mode='rgb_array')
+
+        # if flipDisplay:
+        #     img = np.flipud(img)
+
+        # self.env.viewer.imshow(img)
 
 # Main function to load the game
 def loadGame(): 
@@ -87,9 +102,9 @@ def loadGame():
         elif action == 5:  # 'RIGHT'
             pressed_buttons.append('RIGHT')
         elif action == 6:  # 'START'
-            pressed_buttons.append('Start')
+            pressed_buttons.append('START')
         elif action == 7:  # 'SELECT'
-            pressed_buttons.append('Select')
+            pressed_buttons.append('SELECT')
         elif action == 8:  # 'UP + A'
             pressed_buttons.append('UP')
             pressed_buttons.append('A')
@@ -117,5 +132,44 @@ def loadGame2():
         action = env.action_space.sample()
         env.step(action)
 
+def linuxTest():
+    loadGamepad.initialize_display()  # Initialize the gamepad display
+
+    # Use the custom Punch-Out environment
+    custom_env = CustomPunchOutEnv()
+    custom_env.reset()
+
+    done = False
+
+    while not done:
+        action = custom_env.action_space.sample()
+
+        pressed_buttons = []
+        # Map the custom action to the corresponding pressed buttons for visualization
+        if action == 0:  # 'A'
+            pressed_buttons.append('A')
+        elif action == 1:  # 'B'
+            pressed_buttons.append('B')
+        elif action == 2:  # 'UP'
+            pressed_buttons.append('UP')
+        elif action == 3:  # 'DOWN'
+            pressed_buttons.append('DOWN')
+        elif action == 4:  # 'LEFT'
+            pressed_buttons.append('LEFT')
+        elif action == 5:  # 'RIGHT'
+            pressed_buttons.append('RIGHT')
+        elif action == 6:  # 'START'
+            pressed_buttons.append('START')
+        elif action == 7:  # 'SELECT'
+            pressed_buttons.append('SELECT')
+        elif action == 8:  # 'UP + A'
+            pressed_buttons.append('UP')
+            pressed_buttons.append('A')
+        elif action == 9:  # 'UP + B'
+            pressed_buttons.append('UP')
+            pressed_buttons.append('B')
+
+        loadGamepad.draw_gamepad_overlayRL(pressed_buttons)
+
 if __name__ == '__main__':
-   loadGame()
+   linuxTest()
