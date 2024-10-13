@@ -2,6 +2,7 @@ import retro
 import numpy as np
 import pygame
 import virtualGamepad.loadGamepad as loadGamepad
+import struct
 
 keys_to_action = { # Dictionary that maps keyboard buttons to multibinary list that is read by the emulator 
     # Punch buttons
@@ -19,6 +20,13 @@ keys_to_action = { # Dictionary that maps keyboard buttons to multibinary list t
 
 # A 'noop' action to pass when no keys are pressed (9 zeros for 9 buttons on the NES controller)
 noop_action = [0] * 9
+
+def read_memory_value(env, address):
+    """Reads the memory at the specified address in the retro environment."""
+    memory = env.get_ram()  # Get the full memory block
+    # Unpack the value at the specified address (0x0068) as an unsigned byte (1 byte)
+    value = struct.unpack('B', memory[address:address+1])[0]
+    return value
 
 def emulate():
     # Create PunchOut environment
