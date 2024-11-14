@@ -17,7 +17,8 @@ else:
 class CustomPunchOutEnv:
     def __init__(self):
         self.env = retro.make(game="PunchOut-Nes", state="Match1.state", render_mode=None)
-        self.action_space = spaces.Discrete(11)  # 8 single button actions + 2 uppercut combinations + 1 duck
+        self.action_space = spaces.Discrete(12)  # 8 single button actions + 2 uppercut combinations + 1 duck + 1 non action
+        self.observation_space = self.env.observation_space
         self.reset()
 
     def reset(self):
@@ -150,6 +151,8 @@ def loadGame():
                 pressed_buttons.append('B')
             elif action == 10: # 'DOWN + DOWN'
                 pressed_buttons.append('DOWN')
+            elif action == 11: # No action
+                pass
 
 
         if not action_executed: # If action has not been executed, execute it 
@@ -189,7 +192,7 @@ def loadGame():
 
         # Synchronize the framerate
         clock.tick(fps)
-
+ 
 def loadGame2():
     env = retro.make(game="PunchOut-Nes", state="Match1.state")
     env.reset()

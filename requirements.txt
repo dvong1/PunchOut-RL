@@ -6,3 +6,5 @@ pyglet==1.5.29
 pygame==2.6.0 # might not be required in future development
 stable-retro==0.9.2
 typing_extensions==4.12.2
+neat-python==0.92
+opencv-python==4.10.0.84
