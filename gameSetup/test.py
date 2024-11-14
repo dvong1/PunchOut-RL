@@ -51,6 +51,8 @@ class CustomPunchOutEnv:
             button_array[0] = 1  # 'B' is mapped to index 0
         elif action == 10: # Duck (DOWN + DOWN)
             button_array[5] = 1
+        elif action == 11: # Non-action, no button is pressed
+            pass
 
         # Take a step in the environment using the button array
         return self.env.step(button_array)
