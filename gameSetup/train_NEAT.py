@@ -5,7 +5,7 @@ import numpy as np
 import cv2
 import pickle
 
-env = retro.make(game="PunchOut-Nes", state="Match1.state")
+env = retro.make(game="PunchOut-Nes", state="glassJoe.state")
 
 imgarray = []
 
@@ -25,33 +25,37 @@ def eval_genomes(genomes, config):
 
         current_max_fitness = 0
         fitness_current = 0
-        frame = 0
         counter = 0
-        health_com = 0
-        health_mac = 0
-        heart = 0
-        score = 0
 
         done = False
         
         while not done:
             env.render()
-            frame += 1
-
-            print(f"obs type: {type(obs)}")
-            print(f"obs shape: {obs.shape}")
-            
+  
             obs = cv2.resize(obs, (inx, iny))
             obs = cv2.cvtColor(obs, cv2.COLOR_BGR2GRAY)
             obs = np.reshape(obs, (inx, iny))
-
             imgarray = np.ndarray.flatten(obs) # Downscale, then grayscale, the flatten the 2d dimenions into a 1d array
 
             nn_Output = net.activate(imgarray)
 
-            print(nn_Output)
+            button_array = [1 if output > 0.5 else 0 for output in nn_Output]
 
-            obs, reward, terminated, truncated, info = env.step(nn_Output)
+            obs, reward, terminated, truncated, info = env.step(button_array)
+
+            fitness_current += reward
+
+            if fitness_current > current_max_fitness:
+                current_max_fitness = fitness_current
+                counter = 0
+            else:
+                counter += 1
+
+            if terminated or truncated or counter == 5500:
+                done = True
+                print(f"Genome: {genome_id}, current Fitness: {fitness_current}, max fitness: {current_max_fitness}, counter: {counter}")
+
+            genome.fitness = fitness_current
 
 
 config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
@@ -61,31 +65,16 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
 
 p = neat.Population(config)
 
+p.add_reporter(neat.StdOutReporter(True))
+stats = neat.StatisticsReporter()
+p.add_reporter(stats)
+p.add_reporter(neat.Checkpointer(10))
+
 winner = p.run(eval_genomes)
 
+with open('winner.pkl', 'wb') as output:
+    pickle.dump(winner, output, 1)
 
-
-
-
-# def loadGame2():
-#     env = retro.make(game="PunchOut-Nes", state="Match1.state")
-#     obs = env.reset()
-#     inx, iny, inc = env.observation_space.shape
-#     print(inx, iny)
-
-#     done = False
-
-#     while not done:
-#         action = env.action_space.sample()
-#         env.render()
-#         obs, reward, terminated, truncated, info = env.step(action)
-
-#         pStamina = info['heart']
-
-#         print(pStamina)
-
-# if __name__ == '__main__':
-#    print("tada")
 
 
 # 840 for NN input config file based on raw pixels
