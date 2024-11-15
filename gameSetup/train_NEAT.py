@@ -7,6 +7,20 @@ import pickle
 
 env = retro.make(game="PunchOut-Nes", state="glassJoe.state")
 
+action_space = [
+    [1, 0, 0, 0, 0, 0, 0, 0, 0],  # Left Punch
+    [0, 1, 0, 0, 0, 0, 0, 0, 0],  # No Action
+    [0, 0, 1, 0, 0, 0, 0, 0, 0],  # Select
+    [0, 0, 0, 1, 0, 0, 0, 0, 0],  # Start
+    [0, 0, 0, 0, 1, 0, 0, 0, 0],  # UP
+    [0, 0, 0, 0, 0, 1, 0, 0, 0],  # Duck
+    [0, 0, 0, 0, 0, 0, 1, 0, 0],  # Dodge Left
+    [0, 0, 0, 0, 0, 0, 0, 1, 0],  # Dodge Right
+    [0, 0, 0, 0, 0, 0, 0, 0, 1],  # Right Punch
+    [0, 0, 0, 0, 1, 0, 0, 0, 1],  # Right Uppercut
+    [1, 0, 0, 0, 1, 0, 0, 0, 0],  # Left Uppercut
+]
+
 imgarray = []
 
 def eval_genomes(genomes, config):
@@ -26,22 +40,34 @@ def eval_genomes(genomes, config):
         current_max_fitness = 0
         fitness_current = 0
         counter = 0
+        button_array = []
 
         done = False
         
         while not done:
-            env.render()
+            # env.render()
   
-            obs = cv2.resize(obs, (inx, iny))
-            obs = cv2.cvtColor(obs, cv2.COLOR_BGR2GRAY)
-            obs = np.reshape(obs, (inx, iny))
-            imgarray = np.ndarray.flatten(obs) # Downscale, then grayscale, the flatten the 2d dimenions into a 1d array
+            # # Useless since we are no longer reading raw pixels for NN input
+            # obs = cv2.resize(obs, (inx, iny))
+            # obs = cv2.cvtColor(obs, cv2.COLOR_BGR2GRAY)
+            # obs = np.reshape(obs, (inx, iny))
+            # imgarray = np.ndarray.flatten(obs) # Downscale, then grayscale, the flatten the 2d dimenions into a 1d array
 
-            nn_Output = net.activate(imgarray)
-
-            button_array = [1 if output > 0.5 else 0 for output in nn_Output]
 
             obs, reward, terminated, truncated, info = env.step(button_array)
+
+            ram = env.get_ram()
+
+            # Get memory addresses for NN inputs
+            animation_value = int(ram[81])  
+            time_value = int(ram[57])
+
+            nn_Input = [info['health_mac'], info['health_com'], info['heart'], info['score'], animation_value, time_value]
+
+            nn_Output = net.activate(nn_Input)
+            action_index = nn_Output.index(max(nn_Output))
+
+            button_array = action_space[action_index]
 
             fitness_current += reward
 

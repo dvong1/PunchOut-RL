@@ -4,6 +4,20 @@ import numpy as np
 import cv2
 import pickle
 
+action_space = [
+    [1, 0, 0, 0, 0, 0, 0, 0, 0],  # Left Punch
+    [0, 1, 0, 0, 0, 0, 0, 0, 0],  # No Action
+    [0, 0, 1, 0, 0, 0, 0, 0, 0],  # Select
+    [0, 0, 0, 1, 0, 0, 0, 0, 0],  # Start
+    [0, 0, 0, 0, 1, 0, 0, 0, 0],  # UP
+    [0, 0, 0, 0, 0, 1, 0, 0, 0],  # Duck
+    [0, 0, 0, 0, 0, 0, 1, 0, 0],  # Dodge Left
+    [0, 0, 0, 0, 0, 0, 0, 1, 0],  # Dodge Right
+    [0, 0, 0, 0, 0, 0, 0, 0, 1],  # Right Punch
+    [0, 0, 0, 0, 1, 0, 0, 0, 1],  # Right Uppercut
+    [1, 0, 0, 0, 1, 0, 0, 0, 0],  # Left Uppercut
+]
+
 class Worker(object):
     def __init__(self, genome, config):
         self.genome = genome
@@ -15,30 +29,30 @@ class Worker(object):
 
         obs, _, _, _, _ = self.env.step(self.env.action_space.sample())
 
-        inx = int(obs.shape[0]/8)
-        iny = int(obs.shape[1]/8)
-
         net = neat.nn.FeedForwardNetwork.create(self.genome, self.config)
 
         current_max_fitness = 0
         fitness = 0
         counter = 0
-        imgarray = []
+        button_array = []
 
         done = False
         
         while not done:
+            obs, reward, terminated, truncated, info = self.env.step(button_array)
 
-            obs = cv2.resize(obs, (inx, iny))
-            obs = cv2.cvtColor(obs, cv2.COLOR_BGR2GRAY)
-            obs = np.reshape(obs, (inx, iny))
+            ram = self.env.get_ram()
 
-            imgarray = np.ndarray.flatten(obs)
-            imgarray = np.interp(imgarray, (0, 254), (-1, +1))
+            # Get memory addresses for NN inputs
+            animation_value = int(ram[81])  
+            time_value = int(ram[57])
 
-            actions = net.activate(imgarray)
+            nn_Input = [info['health_mac'], info['health_com'], info['heart'], info['score'], animation_value, time_value]
 
-            obs, reward, terminated, truncated, info = self.env.step(actions)
+            nn_Output = net.activate(nn_Input)
+            action_index = nn_Output.index(max(nn_Output))
+
+            button_array = action_space[action_index]
 
             fitness += reward
 
@@ -64,13 +78,13 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                      'config-feedforward')
 
 p = neat.Population(config)
-p = neat.Checkpointer.restore_checkpoint('neat-checkpoint=9')
+# p = neat.Checkpointer.restore_checkpoint('neat-checkpoint=9')
 p.add_reporter(neat.StdOutReporter(True))
 stats = neat.StatisticsReporter()
 p.add_reporter(stats)
 p.add_reporter(neat.Checkpointer(10))
 
-pe = neat.ParallelEvaluator(20, eval_genomes)
+pe = neat.ParallelEvaluator(2, eval_genomes)
 
 winner = p.run(pe.evaluate)
 
