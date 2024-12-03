@@ -3,6 +3,7 @@ import neat
 import numpy as np
 import cv2
 import pickle
+import random
 
 action_space = [
     [1, 0, 0, 0, 0, 0, 0, 0, 0],  # Left Punch
@@ -17,6 +18,19 @@ action_space = [
     [0, 0, 0, 0, 1, 0, 0, 0, 1],  # Right Uppercut
     [1, 0, 0, 0, 1, 0, 0, 0, 0],  # Left Uppercut
 ]
+
+# game_states = ["glassJoe.state", "vonKaiser.state",
+#                "pistonHonda1.state", "donFlamenco.state",
+#                "kingHippo.state", "greatTiger.state",
+#                "baldBull1.state", "pistonHonda2.state",
+#                ]
+
+game_states = ["glassJoe.state", "vonKaiser.state",
+               "pistonHonda1.state"
+               ]
+
+# game_states = ["glassJoe.state", "vonKaiser.state"
+#                ]
 
 class Worker(object):
     def __init__(self, genome, config):
@@ -46,13 +60,15 @@ class Worker(object):
             # Get memory addresses for NN inputs
             animation_value = int(ram[81])  
             time_value = int(ram[57])
+            current_match_value = int(ram[8])
 
-            nn_Input = [info['health_mac'], info['health_com'], info['heart'], info['score'], animation_value, time_value]
+            nn_Input = [info['health_mac'], info['health_com'], info['heart'], info['score'], animation_value, time_value, current_match_value]
 
             nn_Output = net.activate(nn_Input)
             action_index = nn_Output.index(max(nn_Output))
 
             button_array = action_space[action_index]
+
 
             fitness += reward
 
@@ -64,7 +80,12 @@ class Worker(object):
 
             if terminated or truncated or counter == 5500:
                 done = True
-            
+                
+                self.env.close()
+                randomState = random.choice(game_states)
+                self.env = retro.make(game="PunchOut-Nes", state=randomState, render_mode=None)
+                self.env.reset()
+                
         return fitness
         
 def eval_genomes(genome, config):
@@ -77,16 +98,27 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                      neat.DefaultSpeciesSet, neat.DefaultStagnation,
                      'config-feedforward')
 
+
 p = neat.Population(config)
-# p = neat.Checkpointer.restore_checkpoint('neat-checkpoint=9')
+p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-305') # 498
 p.add_reporter(neat.StdOutReporter(True))
 stats = neat.StatisticsReporter()
 p.add_reporter(stats)
-p.add_reporter(neat.Checkpointer(10))
+p.add_reporter(neat.Checkpointer(250))
 
-pe = neat.ParallelEvaluator(2, eval_genomes)
+p.config.genome_config.mutation_rate = 0.2
+p.config.genome_config.activation_mutate_rate = 0.05
+p.config.genome_config.elitism = 5
+p.config.genome_config.compatibility_threshold = 1.5
+p.config.genome_config.node_add_prob = 0.35
+p.config.genome_config.node_delete_prob = 0.35
+p.config.genome_config.aggregation_mutate_rate = 0.05 
+p.config.genome_config.max_stagnation = 75
 
-winner = p.run(pe.evaluate)
 
-with open('winner.pkl', 'wb') as output:
+pe = neat.ParallelEvaluator(22, eval_genomes)
+
+winner = p.run(pe.evaluate, 25)
+
+with open('winner7.pkl', 'wb') as output:
     pickle.dump(winner, output, 1)

@@ -1,9 +1,8 @@
 import neat.nn.recurrent
 import retro
 import neat
-import numpy as np
-import cv2
 import pickle
+import random
 
 env = retro.make(game="PunchOut-Nes", state="glassJoe.state")
 
@@ -21,9 +20,16 @@ action_space = [
     [1, 0, 0, 0, 1, 0, 0, 0, 0],  # Left Uppercut
 ]
 
+game_states = ["glassJoe.state", "vonKaiser.state",
+               "pistonHonda1.state", "donFlamenco.state",
+               "kingHippo.state", "greatTiger.state",
+               "baldBull1.state", "pistonHonda2.state",
+               ]
+
 imgarray = []
 
 def eval_genomes(genomes, config):
+    global env
 
     for genome_id, genome in genomes:
         obs, _ = env.reset()
@@ -61,13 +67,38 @@ def eval_genomes(genomes, config):
             # Get memory addresses for NN inputs
             animation_value = int(ram[81])  
             time_value = int(ram[57])
+            current_match_value = int(ram[8])
 
-            nn_Input = [info['health_mac'], info['health_com'], info['heart'], info['score'], animation_value, time_value]
+            nn_Input = [info['health_mac'], info['health_com'], info['heart'], info['score'], animation_value, time_value, current_match_value]
 
             nn_Output = net.activate(nn_Input)
             action_index = nn_Output.index(max(nn_Output))
 
             button_array = action_space[action_index]
+
+            mac_losses = int(ram[10])
+            round_number = int(ram[6])
+            comKDs = int(ram[974])
+            macKDs = int(ram[973])
+            current_comKDS = 0
+
+            if mac_losses > 0:
+                reward -= 2.0
+                print("Mac lost")
+            if round_number > 1:
+                reward -= 3.0
+                print("Round has advanced")
+            if comKDs > current_comKDS:
+                current_comKDS = comKDs
+                reward += 3.5
+                print("Mac knockdowned opponent")
+            if macKDs > 0:
+                reward -= 4.0
+                print("Mac has been knocked down")
+            if info['health_com'] == 0:
+                reward += 10.0
+                print("Enemy lost all health")
+
 
             fitness_current += reward
 
@@ -79,8 +110,15 @@ def eval_genomes(genomes, config):
 
             if terminated or truncated or counter == 5500:
                 done = True
-                print(f"Genome: {genome_id}, current Fitness: {fitness_current}, max fitness: {current_max_fitness}, counter: {counter}")
-
+        
+                '''
+                # Randomize which enemy NN will fight to diversify training data 
+                env.close()
+                randomState = random.choice(game_states)
+                env = retro.make(game="PunchOut-Nes", state=randomState)
+                env.reset()
+                print(f"Genome: {genome_id}, current Fitness: {fitness_current}, max fitness: {current_max_fitness}, reward: {reward}")
+                '''
             genome.fitness = fitness_current
 
 
@@ -91,6 +129,7 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
 
 p = neat.Population(config)
 
+# p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-49')
 p.add_reporter(neat.StdOutReporter(True))
 stats = neat.StatisticsReporter()
 p.add_reporter(stats)

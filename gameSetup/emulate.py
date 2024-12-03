@@ -30,7 +30,7 @@ def read_memory_value(env, address):
 
 def emulate():
     # Create PunchOut environment
-    env = retro.make(game="PunchOut-Nes", state="Match1.state", render_mode=None)
+    env = retro.make(game="PunchOut-Nes", state="vonKaiser.state", render_mode=None)
     env.reset()
 
     # Initialize Pygame
@@ -115,7 +115,14 @@ def emulate():
         pygame.display.flip()
 
         # Limit the frame rate
-        clock.tick(fps)
+        clock.tick(90)
+
+        ram = env.get_ram()
+        value = ram[8]
+        value1 = ram[9]
+        value3 = ram[5]
+        value4 = ram[342]
+        print(f"Mac's Losses: {value}, Round #: {value1}, Mac's Knockdowns: {value3}, Mac's stars?: {value4}")
 
 if __name__ == '__main__':
     emulate()
