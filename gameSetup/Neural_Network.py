@@ -74,7 +74,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Punch-Out!!')
 
 # Limit frame rate to match the game's intended speed
-fps = 600
+fps = 60
 clock = pygame.time.Clock()
 frame_count = 0
 button_mapping = ['B', 'No Action', 'SELECT', 'START', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'A']

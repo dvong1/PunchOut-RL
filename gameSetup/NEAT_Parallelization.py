@@ -1,7 +1,5 @@
 import retro
 import neat
-import numpy as np
-import cv2
 import pickle
 import random
 
@@ -19,18 +17,12 @@ action_space = [
     [1, 0, 0, 0, 1, 0, 0, 0, 0],  # Left Uppercut
 ]
 
-# game_states = ["glassJoe.state", "vonKaiser.state",
-#                "pistonHonda1.state", "donFlamenco.state",
-#                "kingHippo.state", "greatTiger.state",
-#                "baldBull1.state", "pistonHonda2.state",
-#                ]
-
 game_states = ["glassJoe.state", "vonKaiser.state",
-               "pistonHonda1.state"
+               "pistonHonda1.state", "donFlamenco.state",
+               "kingHippo.state", "greatTiger.state",
+               "baldBull1.state", "pistonHonda2.state",
                ]
 
-# game_states = ["glassJoe.state", "vonKaiser.state"
-#                ]
 
 class Worker(object):
     def __init__(self, genome, config):
@@ -38,7 +30,7 @@ class Worker(object):
         self.config = config
 
     def work(self):
-        self.env = retro.make(game="PunchOut-Nes", state="glassJoe.state")
+        self.env = retro.make(game="PunchOut-Nes", state="glassJoe.state", render_mode='None')
         self.env.reset()
 
         obs, _, _, _, _ = self.env.step(self.env.action_space.sample())
@@ -83,10 +75,10 @@ class Worker(object):
                 done = True
                 
                 # Randomize enemy state to increase variability in training. This prevents specialization to beating one enemy and one enemy only
-                # self.env.close()
-                # randomState = random.choice(game_states)
-                # self.env = retro.make(game="PunchOut-Nes", state="randomState.state", render_mode=='None')
-                # self.env.reset()
+                self.env.close()
+                randomState = random.choice(game_states)
+                self.env = retro.make(game="PunchOut-Nes", state=randomState, render_mode='None')
+                self.env.reset()
                 
         return fitness
         
@@ -102,25 +94,16 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
 
 
 p = neat.Population(config)
-# p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-305')
+# p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-305') # Load neat training checkpoint
 p.add_reporter(neat.StdOutReporter(True))
 stats = neat.StatisticsReporter()
 p.add_reporter(stats)
-# p.add_reporter(neat.Checkpointer(250))
-
-p.config.genome_config.mutation_rate = 0.2
-p.config.genome_config.activation_mutate_rate = 0.05
-p.config.genome_config.elitism = 5
-p.config.genome_config.compatibility_threshold = 1.5
-p.config.genome_config.node_add_prob = 0.35
-p.config.genome_config.node_delete_prob = 0.35
-p.config.genome_config.aggregation_mutate_rate = 0.05 
-p.config.genome_config.max_stagnation = 75
+# p.add_reporter(neat.Checkpointer(250)) # Create neat checkpoint every nth generation
 
 
 pe = neat.ParallelEvaluator(16, eval_genomes)
 
 winner = p.run(pe.evaluate, 25)
 
-with open('winner7.pkl', 'wb') as output:
+with open('winner2.pkl', 'wb') as output:
     pickle.dump(winner, output, 1)

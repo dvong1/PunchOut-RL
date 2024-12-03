@@ -76,12 +76,6 @@ def eval_genomes(genomes, config):
 
             button_array = action_space[action_index]
 
-            mac_losses = int(ram[10])
-            round_number = int(ram[6])
-            comKDs = int(ram[974])
-            macKDs = int(ram[973])
-            current_comKDS = 0
-
             fitness_current += reward
 
             if fitness_current > current_max_fitness:
@@ -121,10 +115,3 @@ winner = p.run(eval_genomes)
 
 with open('winner.pkl', 'wb') as output:
     pickle.dump(winner, output, 1)
-
-
-
-# 840 for NN input config file based on raw pixels
-# 4 for NN input config file based on data.json memory values
-
-# If you want to use memory values for training, normalize the values by retrieving other memory values for enemyHealth / current_enemyHealth

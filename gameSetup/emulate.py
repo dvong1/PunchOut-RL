@@ -24,7 +24,6 @@ noop_action = [0] * 9
 def read_memory_value(env, address):
     """Reads the memory at the specified address in the retro environment."""
     memory = env.get_ram()  # Get the full memory block
-    # Unpack the value at the specified address (0x0068) as an unsigned byte (1 byte)
     value = struct.unpack('B', memory[address:address+1])[0]
     return value
 
@@ -116,13 +115,6 @@ def emulate():
 
         # Limit the frame rate
         clock.tick(90)
-
-        ram = env.get_ram()
-        value = ram[8]
-        value1 = ram[9]
-        value3 = ram[5]
-        value4 = ram[342]
-        print(f"Mac's Losses: {value}, Round #: {value1}, Mac's Knockdowns: {value3}, Mac's stars?: {value4}")
 
 if __name__ == '__main__':
     emulate()
