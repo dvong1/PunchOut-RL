@@ -50,7 +50,7 @@ While this repository is intended for evaluation without execution, the project 
 - **`pygame`**: For interacting with the emulator.  
 - **`requirements.txt`**: All other dependencies can be downloaded with `pip install -r requirements.txt` in a virtual environment
 
-This project also requires a linux installation to run. For a guide on how to setup WSL (Windows Subsystem Linux) on a Windows environment, follow the README and youtube video found at the [**features**](https://github.com/dvong1/PunchOut-RL/tree/features) branch or watch this [video](https://youtu.be/h5RGrSQpR2E) created by me!
+This project also requires a linux installation to run. For a guide on how to setup WSL (Windows Subsystem Linux) on a Windows environment, follow the README and youtube video found at the [**features**](https://github.com/dvong1/PunchOut-RL/tree/features) branch or watch this [video](https://youtu.be/h5RGrSQpR2E) and then this [video](https://youtu.be/Ip3LPCP3ccA) created by me!
 
 
 ## **Challenges and Innovations**  
