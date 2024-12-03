@@ -56,11 +56,14 @@ This project also requires a linux installation to run. For a guide on how to se
 ## **Challenges and Innovations**  
 - Designing a robust fitness function that captures the complexities of *Punch-Out!!*.  
 - Balancing network evolution to avoid overfitting or stagnation.  
-- Overcoming technical issues in connecting NEAT with the game emulator.  
+- Overcoming technical issues in connecting NEAT with the game emulator.
+- Navigating collaboration and project management through Git and Azure DevOps
+- ![Azure DevOps Board](assets/ADO.PNG)
 
 ## **Future Work**  
 - Expanding the AI’s capabilities to tackle other games or real-world problems.  
-- Exploring hybrid algorithms combining NEAT with deep learning for greater adaptability.  
+- Exploring hybrid algorithms combining NEAT with deep learning for greater adaptability.
+- ![Neural Network Graph](assets/Digraph.gv.png)
 
 ## **Acknowledgments**  
 We’d like to thank our professor for their guidance, as well as the developers of the NEAT and Retro libraries for their incredible tools.  
