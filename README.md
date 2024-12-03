@@ -50,17 +50,20 @@ While this repository is intended for evaluation without execution, the project 
 - **`pygame`**: For interacting with the emulator.  
 - **`requirements.txt`**: All other dependencies can be downloaded with `pip install -r requirements.txt` in a virtual environment
 
-This project also requires a linux installation to run. For a guide on how to setup WSL (Windows Subsystem Linux) on a Windows environment, follow the README and youtube video found at the [**features**](https://github.com/dvong1/PunchOut-RL/tree/features) branch or watch this [video](https://youtu.be/h5RGrSQpR2E) created by me!
+This project also requires a linux installation to run. For a guide on how to setup WSL (Windows Subsystem Linux) on a Windows environment, follow the README and youtube video found at the [**features**](https://github.com/dvong1/PunchOut-RL/tree/features) branch or watch this [video](https://youtu.be/h5RGrSQpR2E) and then this [video](https://youtu.be/Ip3LPCP3ccA) created by me!
 
 
 ## **Challenges and Innovations**  
 - Designing a robust fitness function that captures the complexities of *Punch-Out!!*.  
 - Balancing network evolution to avoid overfitting or stagnation.  
-- Overcoming technical issues in connecting NEAT with the game emulator.  
+- Overcoming technical issues in connecting NEAT with the game emulator.
+- Navigating collaboration and project management through Git and Azure DevOps
+- ![Azure DevOps Board](assets/ADO.PNG)
 
 ## **Future Work**  
 - Expanding the AI’s capabilities to tackle other games or real-world problems.  
-- Exploring hybrid algorithms combining NEAT with deep learning for greater adaptability.  
+- Exploring hybrid algorithms combining NEAT with deep learning for greater adaptability.
+- ![Neural Network Graph](assets/Digraph.gv.png)
 
 ## **Acknowledgments**  
 We’d like to thank our professor for their guidance, as well as the developers of the NEAT and Retro libraries for their incredible tools.  
