@@ -82,24 +82,6 @@ def eval_genomes(genomes, config):
             macKDs = int(ram[973])
             current_comKDS = 0
 
-            if mac_losses > 0:
-                reward -= 2.0
-                print("Mac lost")
-            if round_number > 1:
-                reward -= 3.0
-                print("Round has advanced")
-            if comKDs > current_comKDS:
-                current_comKDS = comKDs
-                reward += 3.5
-                print("Mac knockdowned opponent")
-            if macKDs > 0:
-                reward -= 4.0
-                print("Mac has been knocked down")
-            if info['health_com'] == 0:
-                reward += 10.0
-                print("Enemy lost all health")
-
-
             fitness_current += reward
 
             if fitness_current > current_max_fitness:

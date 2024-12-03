@@ -82,6 +82,7 @@ class Worker(object):
             if terminated or truncated or counter == 5500:
                 done = True
                 
+                # Randomize enemy state to increase variability in training. This prevents specialization to beating one enemy and one enemy only
                 # self.env.close()
                 # randomState = random.choice(game_states)
                 # self.env = retro.make(game="PunchOut-Nes", state="randomState.state", render_mode=='None')
