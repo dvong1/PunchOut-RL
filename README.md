@@ -66,6 +66,7 @@ pip install -r requirements.txt
 cp PunchOut.nes venv/lib/python3.10/site-packages/retro/data/stable/PunchOut-Nes/
 cd venv/lib/python3.10/site-packages/retro/data/stable/PunchOut-Nes/
 mv PunchOut.nes rom.nes
+cp -r ~/PunchOut-RL/gameStates/* venv/lib/python3.10/site-packages/retro/data/stable/PunchOut-Nes/
 cd ~/PunchOut-RL
 ```
 
