@@ -38,7 +38,7 @@ class Worker(object):
         self.config = config
 
     def work(self):
-        self.env = retro.make(game="PunchOut-Nes", state="glassJoe.state",  render_mode=None)
+        self.env = retro.make(game="PunchOut-Nes", state="glassJoe.state")
         self.env.reset()
 
         obs, _, _, _, _ = self.env.step(self.env.action_space.sample())
@@ -53,6 +53,7 @@ class Worker(object):
         done = False
         
         while not done:
+            self.env.render()
             obs, reward, terminated, truncated, info = self.env.step(button_array)
 
             ram = self.env.get_ram()
@@ -81,10 +82,10 @@ class Worker(object):
             if terminated or truncated or counter == 5500:
                 done = True
                 
-                self.env.close()
-                randomState = random.choice(game_states)
-                self.env = retro.make(game="PunchOut-Nes", state=randomState, render_mode=None)
-                self.env.reset()
+                # self.env.close()
+                # randomState = random.choice(game_states)
+                # self.env = retro.make(game="PunchOut-Nes", state="randomState.state", render_mode=='None')
+                # self.env.reset()
                 
         return fitness
         
@@ -100,11 +101,11 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
 
 
 p = neat.Population(config)
-p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-305') # 498
+# p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-305')
 p.add_reporter(neat.StdOutReporter(True))
 stats = neat.StatisticsReporter()
 p.add_reporter(stats)
-p.add_reporter(neat.Checkpointer(250))
+# p.add_reporter(neat.Checkpointer(250))
 
 p.config.genome_config.mutation_rate = 0.2
 p.config.genome_config.activation_mutate_rate = 0.05
@@ -116,7 +117,7 @@ p.config.genome_config.aggregation_mutate_rate = 0.05
 p.config.genome_config.max_stagnation = 75
 
 
-pe = neat.ParallelEvaluator(22, eval_genomes)
+pe = neat.ParallelEvaluator(16, eval_genomes)
 
 winner = p.run(pe.evaluate, 25)
 
