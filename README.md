@@ -60,14 +60,14 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Set Up the ROM File
+### 4. Set Up the ROM File and game State files
 - Copy the rom (.nes) file 
 ```bash
 cp PunchOut.nes venv/lib/python3.10/site-packages/retro/data/stable/PunchOut-Nes/
 cd venv/lib/python3.10/site-packages/retro/data/stable/PunchOut-Nes/
 mv PunchOut.nes rom.nes
-cp -r ~/PunchOut-RL/gameStates/* venv/lib/python3.10/site-packages/retro/data/stable/PunchOut-Nes/
 cd ~/PunchOut-RL
+cp -r ~/PunchOut-RL/gameStates/* venv/lib/python3.10/site-packages/retro/data/stable/PunchOut-Nes/
 ```
 
 ### 5. Download necessary visual interface package
