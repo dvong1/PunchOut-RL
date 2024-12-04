@@ -22,7 +22,7 @@ This project leverages NeuroEvolution of Augmenting Topologies (NEAT) to train a
 NEAT is a cutting-edge algorithm inspired by evolution. Unlike traditional AI models that require extensive datasets, NEAT dynamically evolves its neural networks by adding complexity only when necessary. This makes it ideal for solving problems where patterns and behaviors emerge over time—like mastering *Punch-Out!!*.  
 
 ## **Demo**  
-Check out the [YouTube video](https://youtu.be/Ip3LPCP3ccA) showcasing the AI in action! The demo highlights the training process, technical challenges, and the AI's ability to adapt and play effectively.  
+Check out the [YouTube video](https://youtu.be/ZUUOfK22QCc) showcasing the AI in action! The demo highlights the training process, technical challenges, and the AI's ability to adapt and play effectively.  
 
 ## **How It Works**  
 1. **Game Simulation:**  
